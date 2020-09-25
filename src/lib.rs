@@ -66,6 +66,7 @@ impl SINType {
 }
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
+/// A social insurance number.
 pub struct SIN {
     inner_digits: [u8; 9],
 }
