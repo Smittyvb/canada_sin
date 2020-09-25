@@ -152,6 +152,39 @@ impl SIN {
             _ => unreachable!(),
         }
     }
+    /// Returns the parsed digits as an array of digits.
+    pub fn digits(self) -> [u8; 9] {
+        self.inner_digits
+    }
+    fn gen_sin_string_part(part: &[u8]) -> String {
+        part.iter().map(|d| d.to_string()).collect::<String>()
+    }
+    /// Returns the SIN as a string.
+    ///
+    /// ## Examples
+    /// ```
+    /// use canada_sin::SIN;
+    /// let sin = SIN::parse("046454286".to_string()).unwrap();
+    /// assert_eq!(sin.digits_string(), "046454286")
+    /// ```
+    pub fn digits_string(self) -> String {
+        Self::gen_sin_string_part(&self.inner_digits)
+    }
+    /// Returns the SIN as a string with dashes in it.
+    /// ## Examples
+    /// ```
+    /// use canada_sin::SIN;
+    /// let sin = SIN::parse("046454286".to_string()).unwrap();
+    /// assert_eq!(sin.digits_dashed_string(), "046-454-286")
+    /// ```
+    pub fn digits_dashed_string(self) -> String {
+        format!(
+            "{}-{}-{}",
+            Self::gen_sin_string_part(&self.inner_digits[0..3]),
+            Self::gen_sin_string_part(&self.inner_digits[3..6]),
+            Self::gen_sin_string_part(&self.inner_digits[6..9]),
+        )
+    }
 }
 
 #[cfg(test)]
@@ -222,5 +255,21 @@ mod tests {
             SIN::parse("543537672346234345464254235".to_string()),
             Err(SINParseError::TooLong)
         );
+    }
+
+    #[test]
+    fn digits_string() {
+        let sin = SIN::parse("000-000-000".to_string()).unwrap();
+        assert_eq!(sin.digits_string(), "000000000");
+        let sin = SIN::parse("999999998".to_string()).unwrap();
+        assert_eq!(sin.digits_string(), "999999998");
+    }
+
+    #[test]
+    fn digits_dashed_string() {
+        let sin = SIN::parse("000-000-000".to_string()).unwrap();
+        assert_eq!(sin.digits_dashed_string(), "000-000-000");
+        let sin = SIN::parse("999999998".to_string()).unwrap();
+        assert_eq!(sin.digits_dashed_string(), "999-999-998");
     }
 }
