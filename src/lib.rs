@@ -1,6 +1,6 @@
 //! A library for parsing Canadian social insurance numbers and business numbers.
 
-use std::convert::TryInto;
+use std::{convert::TryInto, fmt};
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 #[non_exhaustive]
@@ -185,6 +185,22 @@ impl SIN {
             Self::gen_sin_string_part(&self.inner_digits[3..6]),
             Self::gen_sin_string_part(&self.inner_digits[6..9]),
         )
+    }
+}
+
+impl fmt::Display for SIN {
+    /// Formats the SIN into three parts with dashes.
+    ///
+    /// ## Examples
+    /// ```
+    /// use canada_sin::SIN;
+    /// assert_eq!(
+    ///     format!("Your SIN is {}.", SIN::parse("046454286".to_string()).unwrap()),
+    ///     "Your SIN is 046-454-286.".to_string(),
+    /// );
+    /// ```
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.digits_dashed_string())
     }
 }
 
