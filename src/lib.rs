@@ -1,10 +1,38 @@
+//! A library for parsing Canadian social insurance numbers and business numbers.
+
 use std::convert::TryInto;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
+/// An error resulting from parsing a SIN
 pub enum SINParseError {
     TooLong,
     TooShort,
     InvalidChecksum,
+}
+
+/// Types of SINs: All the provinces, plus some other categories.
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum SINType {
+    /// CRA-assigned Individual Tax Numbers, Temporary Tax Numbers and Adoption Tax Numbers
+    CRAAssigned,
+    TemporaryResident,
+    /// Business numbers and SINs share the same namespace.
+    BusinessNumber,
+    /// Military forces abroad.
+    OverseasForces,
+    Alberta,
+    BritishColumbia,
+    Manitoba,
+    NewBrunswick,
+    NewfoundlandLabrador,
+    NorthwestTerritories,
+    NovaScotia,
+    Nunavut,
+    Ontario,
+    PrinceEdwardIsland,
+    Quebec,
+    Saskatchewan,
+    Yukon,
 }
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
@@ -47,6 +75,29 @@ impl SIN {
         match boxing_result {
             Ok(val) => Ok(Self { inner_digits: *val }),
             Err(_) => unreachable!(),
+        }
+    }
+    /// All types the SIN *could* be. This will often be multiple options, since this is based on
+    /// the first digit, and we are running out of numbers, so there is some overlap. However, the
+    /// following can be determined unambiguously:
+    /// - `CRAAssigned` (starts with 0)
+    /// - `TemporaryResident` (starts with 9)
+    /// - `Quebec` (starts with 2 or 3)
+    /// - `BusinessNumber` sometimes (if it starts with 8 it's a business number, if it starts with 7 it *might* be one)
+    /// 
+    /// The logic is based on [this mapping](https://en.wikipedia.org/wiki/Social_Insurance_Number#Geography).
+    pub fn types(&self) -> Vec<SINType> {
+        use SINType::*;
+        match self.inner_digits[0] {
+            0 => vec![CRAAssigned],
+            1 => vec![NovaScotia, NewBrunswick, PrinceEdwardIsland, NewfoundlandLabrador],
+            2 | 3 => vec![Quebec],
+            4 | 5 => vec![Ontario, OverseasForces],
+            6 => vec![Ontario, Manitoba, Saskatchewan, Alberta, NorthwestTerritories, Nunavut],
+            7 => vec![BritishColumbia, Yukon, BusinessNumber],
+            8 => vec![BusinessNumber],
+            9 => vec![TemporaryResident],
+            _ => unreachable!(),
         }
     }
 }
