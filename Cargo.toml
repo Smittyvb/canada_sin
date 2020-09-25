@@ -3,7 +3,7 @@ name = "canada_sin"
 version = "1.0.0"
 authors = ["Smitty <smitop2@gmail.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "A Rust crate for working with Canadian social insurance numbers"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
