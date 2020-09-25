@@ -1,6 +1,6 @@
 [package]
 name = "canada_sin"
-version = "1.0.2"
+version = "1.1.0"
 authors = ["Smitop <smitop2@gmail.com>"]
 edition = "2018"
 description = "A Rust crate for working with Canadian social insurance numbers"
