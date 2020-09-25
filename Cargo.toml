@@ -1,9 +1,12 @@
 [package]
 name = "canada_sin"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["Smitop <smitop2@gmail.com>"]
 edition = "2018"
 description = "A Rust crate for working with Canadian social insurance numbers"
 license = "MIT OR Apache-2.0"
+repository = "https://github.com/smittyvb/canada_sin"
+homepage = "https://github.com/smittyvb/canada_sin"
+documentation = "https://docs.rs/canada_sin/"
 
 [dependencies]
