@@ -71,6 +71,13 @@ pub struct SIN {
 }
 
 impl SIN {
+    /// Parses a SIN from a string.
+    ///
+    /// ## Examples
+    /// ```
+    /// use canada_sin::SIN;
+    /// assert!(SIN::parse("046454286".to_string()).is_ok());
+    /// ```
     pub fn parse(s: String) -> Result<Self, SINParseError> {
         let mut digits = Vec::with_capacity(9);
         for khar in s.chars() {
