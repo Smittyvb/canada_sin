@@ -6,8 +6,11 @@ use std::{convert::TryInto, fmt};
 #[non_exhaustive]
 /// An error resulting from parsing a SIN
 pub enum SINParseError {
+    /// The SIN is longer than 9 digits.
     TooLong,
+    /// The SIN is less than 9 digits.
     TooShort,
+    /// The SIN has an invalid Luhn checksum.
     InvalidChecksum,
 }
 
