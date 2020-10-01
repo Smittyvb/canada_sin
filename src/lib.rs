@@ -108,7 +108,7 @@ impl SIN {
                         }
                     })
                     .sum();
-                if dbg!(luhn_sum) % 10 != 0 {
+                if luhn_sum % 10 != 0 {
                     return Err(SINParseError::InvalidChecksum);
                 }
             }
