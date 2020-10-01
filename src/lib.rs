@@ -130,6 +130,19 @@ impl SIN {
     /// - `BusinessNumber` sometimes (if it starts with 8 it's a business number, if it starts with 7 it *might* be one)
     ///
     /// The logic is based on [this mapping](https://en.wikipedia.org/wiki/Social_Insurance_Number#Geography).
+    ///
+    /// ## Examples
+    /// ```
+    /// use canada_sin::{SIN, SINType};
+    /// let sin = SIN::parse("346454382".to_string()).unwrap();
+    /// assert_eq!(sin.types(), vec![SINType::Quebec]);
+    /// ```
+    ///
+    /// ```
+    /// use canada_sin::{SIN, SINType::*};
+    /// let sin = SIN::parse("734323843".to_string()).unwrap();
+    /// assert_eq!(sin.types(), vec![BritishColumbia, Yukon, BusinessNumber]);
+    /// ```
     pub fn types(&self) -> Vec<SINType> {
         use SINType::*;
         match self.inner_digits[0] {
